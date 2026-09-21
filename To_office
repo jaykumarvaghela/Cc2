@@ -1,0 +1,484 @@
+Exactly. If your goal is eventually to sell forecasting as a service, you should learn it end-to-end, not just learn Prophet/XGBoost and call yourself a forecaster.
+
+I’d structure your learning as a “Time-Series Forecasting from Zero → Production → Client Delivery” path.
+
+The full roadmap
+
+1. Foundations
+
+What is a time series?
+
+Target, timestamp, frequency
+
+Trend
+
+Seasonality
+
+Cyclicality
+
+Noise
+
+Level
+
+Stationarity
+
+Autocorrelation / partial autocorrelation
+
+Lag & lead
+
+Rolling statistics
+
+
+2. Data preparation
+
+Date parsing
+
+Missing dates
+
+Missing values
+
+Duplicates
+
+Outliers
+
+Aggregation: daily → weekly → monthly
+
+Resampling
+
+Business calendars
+
+Multiple products / customers
+
+Leakage prevention
+
+
+3. Understanding the series
+
+Plotting
+
+Trend decomposition
+
+Seasonal decomposition
+
+ACF/PACF
+
+Correlation
+
+Distribution
+
+Change points
+
+Anomaly detection
+
+
+4. Baseline forecasting
+
+Before fancy ML, learn:
+
+Naive forecast
+
+Seasonal naive
+
+Moving average
+
+Weighted moving average
+
+Drift
+
+
+This is extremely important for client work because a complicated model isn't useful if it can't beat a simple baseline.
+
+5. Statistical forecasting
+
+Then:
+
+Exponential smoothing
+
+Simple Exponential Smoothing
+
+Holt
+
+Holt-Winters
+
+AR
+
+MA
+
+ARMA
+
+ARIMA
+
+SARIMA
+
+SARIMAX
+
+ETS
+
+
+6. Modern forecasting
+
+Then your current topics:
+
+Prophet
+
+BSTS
+
+Dynamic regression
+
+XGBoost / LightGBM
+
+Random Forest
+
+Feature engineering
+
+Lag features
+
+Rolling features
+
+Calendar features
+
+
+7. Multiple variables
+
+This is where forecasting becomes much more useful commercially.
+
+Example:
+
+Sales isn't determined only by historical sales.
+
+You might have:
+
+Sales = f(history, price, promotion, holiday, inventory, weather, marketing...)
+
+Learn:
+
+Exogenous variables
+
+Regression + time series
+
+Feature importance
+
+Interventions
+
+Promotions
+
+Price effects
+
+External signals
+
+
+8. Validation
+
+This is probably one of the most important sections for you.
+
+Learn why ordinary:
+
+train_test_split()
+
+is often wrong for time series.
+
+Then learn:
+
+Chronological train/test
+
+Rolling-origin validation
+
+Walk-forward validation
+
+Expanding window
+
+Sliding window
+
+Backtesting
+
+Forecast horizon
+
+
+9. Evaluation
+
+Know exactly when to use:
+
+MAE
+
+RMSE
+
+MAPE
+
+sMAPE
+
+WAPE
+
+MASE
+
+Bias
+
+Prediction intervals
+
+
+And understand why MAPE can be problematic when actual values are zero or close to zero.
+
+10. Model selection
+
+Don't ask:
+
+> "Which model is best?"
+
+
+
+Ask:
+
+> "Which model performs best for this particular series and forecasting horizon under proper backtesting?"
+
+
+
+Then learn:
+
+Baseline comparison
+
+Hyperparameter tuning
+
+Cross-validation
+
+Ensemble forecasting
+
+Model selection
+
+Forecast combination
+
+
+
+---
+
+Then we go into the stuff companies actually care about
+
+11. Hierarchical forecasting
+
+For example:
+
+Company
+→ Region
+→ Country
+→ State
+→ Product
+→ SKU
+
+You need forecasts that can potentially reconcile across levels.
+
+Learn:
+
+Bottom-up
+
+Top-down
+
+Middle-out
+
+MinT / reconciliation
+
+
+
+---
+
+12. Probabilistic forecasting
+
+Instead of:
+
+> "Next month sales = 10,500"
+
+
+
+you learn:
+
+> "Expected sales = 10,500
+80% prediction interval = 9,600–11,400"
+
+
+
+This becomes much more useful for inventory and financial planning.
+
+
+---
+
+13. Intermittent demand
+
+Very important if you eventually work with inventory/SKU forecasting.
+
+Example:
+
+Month	Sales
+
+Jan	0
+Feb	0
+Mar	120
+Apr	0
+May	0
+Jun	80
+
+
+Normal forecasting methods can struggle here.
+
+Learn:
+
+Croston
+
+SBA
+
+TSB
+
+intermittent-demand characteristics
+
+
+
+---
+
+14. Production forecasting
+
+This connects directly to your engineering background.
+
+Learn how to build:
+
+Source → validation → feature pipeline → model → forecast → database → dashboard → monitoring
+
+For example:
+
+GCS/BigQuery
+
+↓
+
+Python
+
+↓
+
+Forecasting library
+
+↓
+
+Gold forecast table
+
+↓
+
+Streamlit / Power BI
+
+↓
+
+Business user
+
+
+---
+
+15. Forecast monitoring
+
+A model isn't finished after deployment.
+
+Monitor:
+
+Forecast error
+
+Bias
+
+Data drift
+
+Concept drift
+
+Actual vs forecast
+
+Model degradation
+
+Missing data
+
+Outliers
+
+
+Then retrain when necessary.
+
+
+---
+
+And finally: business forecasting
+
+This is what turns your knowledge into a service.
+
+You need to understand:
+
+Sales forecasting
+
+Demand forecasting
+
+Revenue forecasting
+
+Inventory forecasting
+
+Capacity forecasting
+
+Cash-flow forecasting
+
+Workforce forecasting
+
+And concepts such as:
+
+Actual
+
+Forecast
+
+Plan/Budget
+
+LY (Last Year)
+
+YoY
+
+MoM
+
+Variance
+
+Forecast accuracy
+
+Forecast bias
+
+Driver-based forecasting
+
+
+
+---
+
+The path I'd recommend for you
+
+Don't try to learn all 15 sections simultaneously.
+
+We'll go:
+
+Level 1 → Understand time series
+
+↓
+
+Level 2 → Analyse a real dataset
+
+↓
+
+Level 3 → Build simple forecasts
+
+↓
+
+Level 4 → Statistical models
+
+↓
+
+Level 5 → ML forecasting
+
+↓
+
+Level 6 → Validation + model selection
+
+↓
+
+Level 7 → Advanced forecasting
+
+↓
+
+Level 8 → Production pipeline
+
+↓
+
+Level 9 → Build your forecasting service
+
+And I'll teach it step-by-step with Python, using a dummy sales dataset so you can actually practise without exposing your KPMG/client data.
+
+Most importantly, I won't just give you definitions. We'll take one dataset and carry it through the entire journey—from raw Excel → EDA → baseline → models → backtesting → forecast → dashboard → something you could actually show a potential client.
