@@ -23,6 +23,7 @@ from datetime import datetime
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
 
@@ -103,6 +104,33 @@ def generate_password(length, upper, digits, symbols) -> str:
         pw = "".join(secrets.choice(alphabet) for _ in range(length))
         if all(any(c in p for c in pw) for p in pools):
             return pw
+
+
+def copy_button(text: str, label: str, clear_after: int = 30) -> None:
+    """One-click copy without revealing the value. Best-effort clipboard clear after N seconds."""
+    payload = json.dumps(text).replace("</", "<\\/")
+    components.html(
+        f"""
+        <button id="b" style="width:100%;min-height:44px;font:600 14px sans-serif;cursor:pointer;
+                border:1px solid #6b7280;border-radius:8px;background:#f0f2f6;color:#111">{label}</button>
+        <span id="s" role="status" aria-live="polite" style="position:absolute;left:-9999px"></span>
+        <script>
+        const v = {payload}, b = document.getElementById("b"), s = document.getElementById("s"), l = b.textContent;
+        async function copy() {{
+          try {{ await navigator.clipboard.writeText(v); }}
+          catch (e) {{
+            const t = document.createElement("textarea"); t.value = v; document.body.appendChild(t);
+            t.select(); document.execCommand("copy"); t.remove();
+          }}
+          b.textContent = "✓ Copied"; s.textContent = "Copied to clipboard";
+          setTimeout(() => {{ b.textContent = l; s.textContent = ""; }}, 2000);
+          setTimeout(() => {{ navigator.clipboard.writeText(" ").catch(() => {{}}); }}, {clear_after * 1000});
+        }}
+        b.addEventListener("click", copy);
+        </script>
+        """,
+        height=52,
+    )
 
 
 def lock() -> None:
@@ -200,11 +228,15 @@ def vault_tab() -> None:
 
     for e in shown:
         with st.expander(f"{e['title']}  ·  {e['username']}  ·  {e['category']}"):
+            cu, cp = st.columns(2)
+            with cu:
+                copy_button(e["username"], "📋 Copy username")
+            with cp:
+                copy_button(e["password"], "🔑 Copy password")
             if st.checkbox("Show password", key=f"show_{e['id']}"):
-                st.code(e["password"], language=None)  # code block has a built-in copy button
+                st.code(e["password"], language=None)
             else:
                 st.text("Password: hidden")
-                st.code(e["username"], language=None)
             if e["url"]:
                 st.markdown(f"**URL:** {e['url']}")
             if e["notes"]:
